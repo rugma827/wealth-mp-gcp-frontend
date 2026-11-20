@@ -1,0 +1,164 @@
+:root {
+  /* ═══════════════════════════════════════════════
+     TCS BRAND — PRIMARY TOKENS
+     Corporate Blue #477AC6 leads all interactive UI.
+     Turquoise #12C6B3 marks AI/agentic features.
+     Green stays ONLY for financial positive data.
+  ═══════════════════════════════════════════════ */
+
+  /* TCS Brand */
+  --tcs-blue:           #477AC6;
+  --tcs-blue-hover:     #5A8FD6;
+  --tcs-blue-dark:      #3366B3;
+  --tcs-blue-light:     rgba(71, 122, 198, 0.12);
+  --tcs-blue-subtle:    rgba(71, 122, 198, 0.06);
+  --tcs-blue-glow:      rgba(71, 122, 198, 0.28);
+  --tcs-blue-rgb:       71, 122, 198;
+
+  --tcs-turquoise:      #12C6B3;
+  --tcs-turquoise-light: rgba(18, 198, 179, 0.12);
+  --tcs-turquoise-glow:  rgba(18, 198, 179, 0.22);
+
+  --tcs-deep-indigo:    #1B2A4A;
+
+  /* Mode Colors — AI chat modes */
+  --mode-meeting:   #8b5cf6;
+  --mode-research:  #6366f1;
+  --mode-email:     #477AC6;
+  --mode-report:    #12C6B3;
+
+  /* ═══════════════════════════════════════════════
+     FINANCIAL SEMANTIC COLORS
+     Green = profit/positive data ONLY.
+     Never use green for brand/interactive chrome.
+  ═══════════════════════════════════════════════ */
+  --fin-positive:       #22C55E;
+  --fin-positive-dark:  #16A34A;
+  --fin-positive-light: rgba(34, 197, 94, 0.10);
+  --fin-positive-subtle: rgba(34, 197, 94, 0.05);
+
+  --fin-negative:       #EF4444;
+  --fin-negative-light: rgba(239, 68, 68, 0.10);
+
+  /* Keep --success aliased to fin-positive for backward compat */
+  --success:        #22C55E;
+  --success-dark:   #16A34A;
+  --success-light:  rgba(34, 197, 94, 0.10);
+  --success-lighter: rgba(34, 197, 94, 0.05);
+  --success-subtle: rgba(34, 197, 94, 0.02);
+
+  /* Semantic */
+  --warning:        #F59E0B;
+  --warning-dark:   #D97706;
+  --error:          #EF4444;
+  --info:           #477AC6;
+
+  /* Priority */
+  --priority-critical: #EF4444;
+  --priority-high:     #F59E0B;
+  --priority-medium:   #477AC6;
+  --priority-low:      #64748B;
+
+  /* Investment Proposal — light surface pages */
+  --ip-header-dark:       rgba(6, 78, 59, 0.95);
+  --ip-header-dark-hover: rgba(5, 150, 105, 0.95);
+  --ip-accent:            #10B981;
+  --ip-text-primary:      #0F172A;
+  --ip-text-secondary:    #334155;
+  --ip-text-tertiary:     #64748B;
+  --ip-bg-light:          #F8F9FA;
+  --ip-bg-white:          #FFFFFF;
+  --ip-border:            #E2E8F0;
+  --ip-border-light:      #F1F5F9;
+
+  /* Portfolio Rebalancing */
+  --pr-header-dark:       rgba(6, 95, 70, 0.9);
+  --pr-header-dark-hover: rgba(6, 120, 90, 0.9);
+  --pr-accent:            #12C6B3;
+  --pr-text-primary:      #0F172A;
+  --pr-text-secondary:    #334155;
+  --pr-text-tertiary:     #64748B;
+  --pr-bg-light:          #F8F9FA;
+  --pr-bg-white:          #FFFFFF;
+  --pr-border:            #E2E8F0;
+  --pr-border-light:      #F1F5F9;
+
+  /* ═══════════════════════════════════════════════
+     SPACING SCALE
+  ═══════════════════════════════════════════════ */
+  --space-xs:  0.25rem;
+  --space-sm:  0.5rem;
+  --space-md:  1rem;
+  --space-lg:  1.5rem;
+  --space-xl:  2rem;
+  --space-2xl: 3rem;
+
+  /* ═══════════════════════════════════════════════
+     BORDER RADIUS
+  ═══════════════════════════════════════════════ */
+  --radius-xs:   6px;
+  --radius-sm:   10px;
+  --radius-md:   14px;
+  --radius-lg:   18px;
+  --radius-xl:   24px;
+  --radius-full: 9999px;
+
+  /* ═══════════════════════════════════════════════
+     SHADOWS — deeper for dark canvas
+  ═══════════════════════════════════════════════ */
+  --shadow-sm:   0 1px 4px rgba(0, 0, 0, 0.18);
+  --shadow-md:   0 4px 16px rgba(0, 0, 0, 0.22);
+  --shadow-lg:   0 8px 32px rgba(0, 0, 0, 0.30);
+  --shadow-hero: 0 16px 56px rgba(0, 0, 0, 0.40);
+
+  /* TCS Blue glows — replace green glows on interactive elements */
+  --glow-primary:        0 0 20px rgba(71, 122, 198, 0.30);
+  --glow-primary-strong: 0 0 32px rgba(71, 122, 198, 0.45);
+  --glow-turquoise:      0 0 20px rgba(18, 198, 179, 0.25);
+
+  /* Financial data glows — kept for charts/numbers only */
+  --glow-positive:       0 0 16px rgba(34, 197, 94, 0.30);
+  --glow-critical:       0 0 16px rgba(239, 68, 68, 0.30);
+  --glow-high:           0 0 16px rgba(245, 158, 11, 0.30);
+  --glow-medium:         0 0 16px rgba(71, 122, 198, 0.30);
+
+  /* Legacy aliases */
+  --glow-accent:         0 0 20px rgba(71, 122, 198, 0.20);
+  --glow-success:        0 0 16px rgba(34, 197, 94, 0.28);
+  --glow-success-strong: 0 0 28px rgba(34, 197, 94, 0.42);
+
+  /* ═══════════════════════════════════════════════
+     BLUR SCALE
+  ═══════════════════════════════════════════════ */
+  --blur-sm:  8px;
+  --blur-md:  16px;
+  --blur-lg:  24px;
+
+  /* ═══════════════════════════════════════════════
+     TRANSITIONS
+  ═══════════════════════════════════════════════ */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+
+  /* ═══════════════════════════════════════════════
+     Z-INDEX SCALE
+  ═══════════════════════════════════════════════ */
+  --z-base:     1;
+  --z-elevated: 10;
+  --z-sticky:   20;
+  --z-dropdown: 30;
+  --z-modal:    100;
+  --z-tooltip:  1000;
+  --z-overlay:  10000;
+
+  /* ═══════════════════════════════════════════════
+     BORDER WEIGHTS
+  ═══════════════════════════════════════════════ */
+  --border-thin:   1px;
+  --border-medium: 2px;
+  --border-thick:  3px;
+
+  /* Typography floor */
+  --font-size-min: 0.625rem;
+}

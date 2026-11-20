@@ -1,0 +1,83 @@
+/* ==========================================================================
+   MEETING INTELLIGENCE DESIGN TOKENS
+   Faithful to Wealth Advisory Dark Glassmorphic Design System
+   ========================================================================== */
+
+:root {
+  /* Brand Accents */
+  --tcs-blue: #477AC6;
+  --tcs-blue-hover: #5A8FD6;
+  --tcs-blue-dark: #3366B3;
+  --tcs-blue-light: rgba(71, 122, 198, 0.12);
+  --tcs-blue-subtle: rgba(71, 122, 198, 0.06);
+  --tcs-blue-glow: rgba(71, 122, 198, 0.28);
+  
+  --tcs-turquoise: #12C6B3;
+  --tcs-turquoise-light: rgba(18, 198, 179, 0.12);
+  --tcs-turquoise-glow: rgba(18, 198, 179, 0.25);
+
+  --accent-purple: #8B5CF6;
+  --accent-purple-light: rgba(139, 92, 246, 0.12);
+
+  /* Financial & Status Semantic Colors */
+  --fin-positive: #22C55E;
+  --fin-positive-bg: rgba(34, 197, 94, 0.12);
+  --fin-negative: #EF4444;
+  --fin-negative-bg: rgba(239, 68, 68, 0.12);
+  
+  --success: #22C55E;
+  --warning: #F59E0B;
+  --warning-bg: rgba(245, 158, 11, 0.12);
+  --error: #EF4444;
+  --error-bg: rgba(239, 68, 68, 0.12);
+
+  --priority-critical: #EF4444;
+  --priority-high: #F59E0B;
+  --priority-medium: #477AC6;
+  --priority-low: #64748B;
+
+  /* Surfaces & Glass Backgrounds */
+  --bg-canvas: #0A0F1E;
+  --bg-primary: rgba(255, 255, 255, 0.025);
+  --bg-secondary: rgba(255, 255, 255, 0.045);
+  --bg-tertiary: rgba(255, 255, 255, 0.065);
+  --bg-elevated: #131C2E;
+  --bg-card-solid: #111827;
+  --modal-bg: rgba(12, 19, 36, 0.96);
+
+  --glass-bg: rgba(255, 255, 255, 0.035);
+  --glass-bg-hover: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-hover: rgba(71, 122, 198, 0.4);
+  --glass-border-active: rgba(18, 198, 179, 0.5);
+
+  --header-bg: rgba(8, 13, 28, 0.85);
+
+  /* Typography */
+  --font-main: 'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  --text-primary: #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --text-tertiary: #94A3B8;
+  --text-muted: #64748B;
+  --text-on-accent: #FFFFFF;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.65);
+  --shadow-glow: 0 0 25px rgba(71, 122, 198, 0.2);
+
+  /* Radii */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Layout */
+  --header-height: 68px;
+  --container-max-width: 1440px;
+}

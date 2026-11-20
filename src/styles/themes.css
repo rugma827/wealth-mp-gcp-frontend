@@ -1,0 +1,179 @@
+/* ═══════════════════════════════════════════════════════════
+   DARK THEME — BFSI Institutional
+   Canvas: #0A0F1E  (deep navy-black, not pitch black)
+   Card:   #111827  (dark navy-slate, glass layer on top)
+   Primary interactive: TCS Blue #477AC6
+   AI accent: TCS Turquoise #12C6B3
+   Financial positive: #22C55E (data only, not chrome)
+═══════════════════════════════════════════════════════════ */
+[data-theme="dark"] {
+  --tcs-blue:           #10B981;
+  --tcs-blue-hover:     #34D399;
+  --tcs-blue-dark:      #059669;
+  --tcs-blue-light:     rgba(16, 185, 129, 0.14);
+  --tcs-blue-subtle:    rgba(16, 185, 129, 0.07);
+  --tcs-blue-glow:      rgba(16, 185, 129, 0.32);
+  --color-primary:      #10B981;
+  --color-primary-hover:#34D399;
+
+  /* Canvas layers */
+  --bg-canvas:          #0A0F1E;
+  --bg-primary:         rgba(255, 255, 255, 0.025);
+  --bg-secondary:       rgba(255, 255, 255, 0.045);
+  --bg-tertiary:        rgba(255, 255, 255, 0.065);
+  --bg-elevated:        #131C2E;
+  --bg-card-solid:      #111827;
+
+  /* Glass surfaces */
+  --glass-bg:           rgba(255, 255, 255, 0.04);
+  --glass-border:       rgba(255, 255, 255, 0.08);
+  --glass-border-hover: rgba(16, 185, 129, 0.40);
+
+  /* Card */
+  --card-bg:            rgba(255, 255, 255, 0.045);
+
+  /* Modal */
+  --modal-bg:           rgba(10, 15, 30, 0.96);
+  --modal-header-bg:    rgba(8, 12, 24, 0.98);
+
+  /* Pill / chip */
+  --pill-bg:            rgba(16, 185, 129, 0.12);
+
+  /* Chat */
+  --bg-chat-gradient:   rgba(255, 255, 255, 0.025);
+  --bg-chat-card:       rgba(255, 255, 255, 0.045);
+
+  /* Border */
+  --border-color:       rgba(255, 255, 255, 0.08);
+
+  /* Header */
+  --header-bg:          rgba(8, 13, 28, 0.82);
+
+  /* Info */
+  --info-light:         rgba(16, 185, 129, 0.16);
+  --info-dark:          #93C5FD;
+
+  /* Text */
+  --text-primary:       #F1F5F9;
+  --text-secondary:     #B8C5D6;
+  --text-tertiary:      #8899AA;
+  --text-on-accent:     #FFFFFF;
+
+  /* ── Background gradient mesh ──
+     TCS Blue blob top-left, Deep Indigo bottom-right,
+     faint Turquoise top-right. No green blobs.
+  ── */
+  --gradient-bg:
+    radial-gradient(ellipse 60% 70% at 0% 0%,   rgba(16, 185, 129, 0.10) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 100% 0%,  rgba(18, 198, 179, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse 65% 70% at 100% 100%, rgba(27, 42, 74, 0.18)  0%, transparent 55%),
+    radial-gradient(ellipse 50% 55% at 0% 100%,  rgba(16, 185, 129, 0.07) 0%, transparent 50%),
+    #0A0F1E;
+
+  --gradient-mesh:
+    radial-gradient(ellipse 60% 70% at 0% 0%,   rgba(16, 185, 129, 0.10) 0%, transparent 55%),
+    radial-gradient(ellipse 65% 70% at 100% 100%, rgba(27, 42, 74, 0.18)  0%, transparent 55%),
+    #0A0F1E;
+
+  /* Shadows — heavier on dark canvas */
+  --shadow-sm:   0 1px 4px  rgba(0, 0, 0, 0.45);
+  --shadow-md:   0 4px 20px rgba(0, 0, 0, 0.55);
+  --shadow-lg:   0 8px 40px rgba(0, 0, 0, 0.65);
+
+  /* Glows — TCS Blue for interactive, green only for data */
+  --glow-accent:         0 0 20px rgba(16, 185, 129, 0.25);
+  --glow-primary:        0 0 20px rgba(16, 185, 129, 0.35);
+  --glow-primary-strong: 0 0 32px rgba(16, 185, 129, 0.50);
+  --glow-turquoise:      0 0 20px rgba(18, 198, 179, 0.28);
+  --glow-success:        0 0 16px rgba(34, 197, 94, 0.28);
+  --glow-success-strong: 0 0 28px rgba(34, 197, 94, 0.42);
+  --glow-critical:       0 0 16px rgba(239, 68, 68, 0.32);
+  --glow-high:           0 0 16px rgba(245, 158, 11, 0.32);
+  --glow-medium:         0 0 16px rgba(16, 185, 129, 0.30);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LIGHT THEME — BFSI Professional
+   Canvas: #F8F9FA  (neutral, no green tint)
+   Card:   #FFFFFF  (pure white, elevation via shadow)
+   Primary interactive: TCS Blue #477AC6
+═══════════════════════════════════════════════════════════ */
+[data-theme="light"] {
+  --tcs-blue:           #059669;
+  --tcs-blue-hover:     #047857;
+  --tcs-blue-dark:      #064E3B;
+  --tcs-blue-light:     rgba(5, 150, 105, 0.10);
+  --tcs-blue-subtle:    rgba(5, 150, 105, 0.05);
+  --tcs-blue-glow:      rgba(5, 150, 105, 0.25);
+  --color-primary:      #059669;
+  --color-primary-hover:#047857;
+
+  /* Canvas layers */
+  --bg-canvas:          #F8F9FA;
+  --bg-primary:         #F8F9FA;
+  --bg-secondary:       #FFFFFF;
+  --bg-tertiary:        #F1F5F9;
+  --bg-elevated:        #FFFFFF;
+  --bg-card-solid:      #1E293B;
+
+  /* Glass surfaces */
+  --glass-bg:           rgba(241, 245, 249, 0.80);
+  --glass-border:       rgba(0, 0, 0, 0.09);
+  --glass-border-hover: rgba(5, 150, 105, 0.40);
+
+  /* Card */
+  --card-bg:            #FFFFFF;
+
+  /* Modal */
+  --modal-bg:           #FFFFFF;
+  --modal-header-bg:    #F8F9FA;
+
+  /* Pill / chip */
+  --pill-bg:            rgba(16, 185, 129, 0.12);
+
+  /* Chat */
+  --bg-chat-gradient:   #F8F9FA;
+  --bg-chat-card:       rgba(30, 41, 59, 0.92);
+
+  /* Border */
+  --border-color:       #E2E8F0;
+
+  /* Header */
+  --header-bg:          rgba(255, 255, 255, 0.88);
+
+  /* Info */
+  --info-light:         #DBEAFE;
+  --info-dark:          #1E40AF;
+
+  /* Text */
+  --text-primary:       #0F172A;
+  --text-secondary:     #334155;
+  --text-tertiary:      #64748B;
+  --text-on-accent:     #FFFFFF;
+
+  /* Background — clean neutral, subtle TCS blue mesh */
+  --gradient-bg:
+    radial-gradient(ellipse 50% 60% at 10% 10%, rgba(16, 185, 129, 0.07) 0%, transparent 50%),
+    radial-gradient(ellipse 40% 50% at 90% 90%, rgba(18, 198, 179, 0.04) 0%, transparent 50%),
+    #F8F9FA;
+
+  --gradient-mesh:
+    radial-gradient(ellipse 50% 60% at 10% 10%, rgba(16, 185, 129, 0.07) 0%, transparent 50%),
+    #F8F9FA;
+
+  /* Shadows — lighter on white canvas */
+  --shadow-sm:   0 1px 3px  rgba(0, 0, 0, 0.07);
+  --shadow-md:   0 4px 14px rgba(0, 0, 0, 0.09);
+  --shadow-lg:   0 8px 28px rgba(0, 0, 0, 0.12);
+
+  /* Glows */
+  --glow-accent:         0 0 16px rgba(16, 185, 129, 0.16);
+  --glow-primary:        0 0 16px rgba(71, 122, 198, 0.20);
+  --glow-primary-strong: 0 0 24px rgba(71, 122, 198, 0.30);
+  --glow-turquoise:      0 0 16px rgba(18, 198, 179, 0.18);
+  --glow-success:        0 0 14px rgba(34, 197, 94, 0.22);
+  --glow-success-strong: 0 0 22px rgba(34, 197, 94, 0.32);
+  --glow-critical:       0 0 14px rgba(239, 68, 68, 0.22);
+  --glow-high:           0 0 14px rgba(245, 158, 11, 0.22);
+  --glow-medium:         0 0 14px rgba(16, 185, 129, 0.25);
+}
