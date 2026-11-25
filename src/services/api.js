@@ -124,41 +124,59 @@ export async function fetchUpcomingMeetings(userId, numDays = 5) {
   return { ok: true, meetings, source: 'live' };
 }
 
+async function streamProgress(taskId, onProgress) {
+  const token = getCognitoToken();
+  const res = await fetch(`${MEETING_PREP_URL}/progress/${taskId}`, {
+    headers: { Authorization: `Bearer ${token}`, Accept: 'text/event-stream' },
+  });
+  if (!res.ok || !res.body) return null;
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let finalResult = null;
+  let buffer = '';
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop();
+    for (const line of lines) {
+      if (!line.startsWith('data: ')) continue;
+      try {
+        const event = JSON.parse(line.slice(6));
+        if (event.type === 'result') { finalResult = event.result; }
+        else { onProgress({ pct: event.pct, label: event.message }); }
+      } catch (_) {}
+    }
+    if (finalResult) break;
+  }
+  return finalResult;
+}
+
 export async function generateMeetingPrep({ userId, meetingId, clientName, onProgress }) {
   const notifyProgress = (pct, label) => typeof onProgress === 'function' && onProgress({ pct, label });
-
-  notifyProgress(10, 'Initiating meeting prep...');
-
-  const res = await post('/client-prep-direct', {
-    user_id: userId,
-    client_name: meetingId || clientName,
-    force_refresh: true,
-  });
-
+  notifyProgress(5, 'Initiating meeting prep...');
+  const res = await post('/client-prep-direct', { user_id: userId, client_name: meetingId || clientName, force_refresh: true });
   if (!res.ok) return { ok: false, error: res.error };
-
-  notifyProgress(100, 'Brief ready!');
-
-  const meeting = res.data?.meetings?.[0];
-  return { ok: true, result: meeting?.data || meeting || res.data };
+  const taskId = res.data?.task_id;
+  if (!taskId) return { ok: false, error: 'No task ID returned from server.' };
+  const result = await streamProgress(taskId, ({ pct, label }) => notifyProgress(pct, label));
+  if (!result) return { ok: false, error: 'Progress stream ended without a result.' };
+  if (result.status === 'error') return { ok: false, error: result.message || 'Meeting prep failed.' };
+  return { ok: true, result };
 }
 
 export async function generateDirectClientPrep(clientName, onProgress, userId) {
   const notifyProgress = (pct, label) => typeof onProgress === 'function' && onProgress({ pct, label });
-
-  notifyProgress(15, `Resolving client "${clientName}"...`);
-
-  const res = await post('/client-prep-direct', {
-    user_id: userId,
-    client_name: clientName,
-    force_refresh: true,
-  });
-
+  notifyProgress(5, `Resolving client "${clientName}"...`);
+  const res = await post('/client-prep-direct', { user_id: userId, client_name: clientName, force_refresh: true });
   if (!res.ok) return { ok: false, error: res.error };
-
-  notifyProgress(100, 'Direct brief complete!');
-  const meeting = res.data?.meetings?.[0];
-  return { ok: true, result: meeting?.data || meeting || res.data };
+  const taskId = res.data?.task_id;
+  if (!taskId) return { ok: false, error: 'No task ID returned from server.' };
+  const result = await streamProgress(taskId, ({ pct, label }) => notifyProgress(pct, label));
+  if (!result) return { ok: false, error: 'Progress stream ended without a result.' };
+  if (result.status === 'error') return { ok: false, error: result.message || 'Meeting prep failed.' };
+  return { ok: true, result };
 }
 
 export function getPptxDownloadUrl(pptxId) {

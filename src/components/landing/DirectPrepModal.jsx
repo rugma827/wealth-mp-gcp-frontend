@@ -31,7 +31,7 @@ export default function DirectPrepModal({ isOpen, onClose }) {
     const res = await triggerDirectPrep(targetName);
     if (res && res.ok) {
       onClose();
-      navigate(`/prep/${res.clientId}`);
+      navigate(`/prep/${taskKey}`);
     } else {
       setSubmitError(res?.error || 'Generation failed. Please try again.');
     }

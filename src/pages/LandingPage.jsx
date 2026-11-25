@@ -126,6 +126,12 @@ export default function LandingPage() {
   const [showSettings, setShowSettings] = useState(false);
   const [showDirectPrep, setShowDirectPrep] = useState(false);
 
+  // Close modals when navigating away and back
+  useEffect(() => {
+    setShowDirectPrep(false);
+    setShowSettings(false);
+  }, []);
+
   // Calendar — initialise to today's real date
   const _today = new Date();
   const [calMonth, setCalMonth] = useState(_today.getMonth());
@@ -133,7 +139,7 @@ export default function LandingPage() {
   const [selectedDay, setSelectedDay] = useState(_today.getDate());
 
   const activeGeneratingKey = useMemo(() => {
-    return Object.keys(generating || {}).find((k) => !!generating[k]) || null;
+    return Object.keys(generating || {}).find((k) => generating[k]?.isGenerating === true) || null;
   }, [generating]);
 
   const isGenerating = Boolean(activeGeneratingKey);
@@ -161,11 +167,11 @@ export default function LandingPage() {
     const key = meeting.meetingId || meeting.id;
     setGenError(key, null);
     if (meeting.status === 'ready') {
-      navigate(`/prep/${meeting.clientId || meeting.id}`);
+      navigate(`/prep/${key}`);
     } else {
       const res = await triggerGenerate(meeting);
       if (res && res.ok) {
-        navigate(`/prep/${res.clientId || meeting.clientId}`);
+        navigate(`/prep/${res.clientId || key}`);
       }
     }
   };
@@ -349,12 +355,12 @@ export default function LandingPage() {
           {/* List-Cards Stack */}
           <div className="hub-list-stack">
             {filteredMeetings.map((meeting, index) => {
-              const mClientId = meeting.clientId || meeting.id || 'C005';
+              const mKey = meeting.meetingId || meeting.id;
               const isFirst = index === 0 && activeTab === 'today';
-              const avatarGrad = AVATAR_GRADIENTS[mClientId] || AVATAR_GRADIENTS['default'];
+              const avatarGrad = AVATAR_GRADIENTS[mKey] || AVATAR_GRADIENTS['default'];
               const initials = getInitials(meeting.clientName);
               const highlight = getMeetingHighlight(meeting);
-              const isReady = meeting.status === 'ready';
+              const isReady = meeting.status === 'ready' || !!results[mKey];
 
               return (
                 <div
@@ -408,7 +414,11 @@ export default function LandingPage() {
 
                           <button
                             className="btn-open-studio"
-                            onClick={() => navigate(`/prep/${mClientId}`)}
+                            onClick={() => {
+                              const brief = results[mKey];
+                              const clientId = brief?.client?.clientId || brief?.client?.customerId || brief?.client?.id || mKey;
+                              navigate(`/prep/${clientId}`);
+                            }}
                           >
                             <span>View Details</span>
                             <ArrowRight size={13} />
@@ -422,7 +432,7 @@ export default function LandingPage() {
 
                           <button
                             className="btn-trigger-gen"
-                            onClick={() => handleActionClick(meeting)}
+                          onClick={() => handleActionClick(meeting)}
                           >
                             <Zap size={13} />
                             <span>Generate Brief</span>
@@ -431,7 +441,7 @@ export default function LandingPage() {
                       )}
 
                       <a
-                        href={getPptxDownloadUrl(mClientId)}
+                        href={getPptxDownloadUrl(mKey)}
                         download
                         className="btn-row-pptx"
                         title="Download presentation deck"
@@ -731,7 +741,7 @@ export default function LandingPage() {
 
             <div className="progress-footer">
               <span className="progress-step-label">
-                Evaluating asset allocation, policy drift & talking scripts...
+                {generating[activeGeneratingKey]?.label || 'Evaluating asset allocation, policy drift & talking scripts...'}
               </span>
               <span className="progress-pct-label">{currentProgressPct}%</span>
             </div>

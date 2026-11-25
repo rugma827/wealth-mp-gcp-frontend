@@ -73,12 +73,20 @@ const MeetingPrep = ({ clientId: propClientId }) => {
   const navigate = useNavigate();
   const { results, generating, progress } = useMeetingPrep();
 
-  // clientId for live events is 'live-{meetingId}' — extract the Google event ID
   const liveMeetingId = clientId?.startsWith('live-') ? clientId.slice(5) : null;
   const liveResult = liveMeetingId
     ? results[liveMeetingId]
-    : (results[clientId] || results[`direct_${clientId}`] || null);
-  const isGenerating = liveMeetingId ? !!generating[liveMeetingId] : false;
+    : (results[clientId] || results[`direct-${clientId}`] || null);
+
+  // Unwrap MCP response envelope if present
+  const unwrappedResult = liveResult?.data?.result || liveResult?.data || liveResult;
+
+  // Debug — remove after confirming correct data
+  if (process.env.NODE_ENV === 'development') {
+    console.log('[MeetingPrep] clientId=%s liveMeetingId=%s liveResult=%o resultKeys=%o',
+      clientId, liveMeetingId, liveResult, Object.keys(results));
+  }
+  const isGenerating = liveMeetingId ? !!generating[liveMeetingId]?.isGenerating : false;
 
   const fmtMoney = (v) => typeof v === 'number' ? formatCurrency(v) : (v || 'N/A');
   const fmtWeight = (v) => typeof v === 'number' ? (v < 1 ? Math.round(v * 100) : v) : v;
@@ -139,9 +147,9 @@ const MeetingPrep = ({ clientId: propClientId }) => {
   };
 
   let live = null;
-  if (liveResult) {
+  if (unwrappedResult) {
     try {
-      live = mapLiveData(liveResult);
+      live = mapLiveData(unwrappedResult);
     } catch (e) {
       live = null;
     }

@@ -31,7 +31,7 @@ export default function MeetingCard({ meeting }) {
     } else {
       const res = await triggerGenerate(meeting);
       if (res && res.ok) {
-        navigate(`/prep/${res.clientId}`);
+        navigate(`/prep/${key}`);
       }
     }
   };

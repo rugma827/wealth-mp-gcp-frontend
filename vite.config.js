@@ -5,6 +5,20 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
+    proxy: {
+      '/meeting-prep': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        proxyTimeout: 600_000,
+        timeout: 600_000,
+      },
+      '/assist': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        proxyTimeout: 600_000,
+        timeout: 600_000,
+      },
+    },
     headers: {
       'Content-Security-Policy': [
         "default-src 'self'",
