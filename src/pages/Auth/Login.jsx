@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, LogOut } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { signInWithFirebase } from '../../utils/firebase';
 import { persistAuthTokens } from '../../utils/authCookies';
@@ -9,7 +9,7 @@ import './Auth.css';
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuth();
+  const { login, ssoLoggedOut } = useAuth();
 
   const sessionExpired =
     location.state?.sessionExpired ||
@@ -64,6 +64,21 @@ export default function Login() {
       setIsSubmitting(false);
     }
   };
+
+  if (ssoLoggedOut) {
+    return (
+      <div className="auth-container">
+        <div className="auth-card" style={{ textAlign: 'center', gap: '16px' }}>
+          <LogOut size={36} style={{ color: '#64748B', margin: '0 auto' }} />
+          <h2 className="auth-welcome">Session Ended</h2>
+          <p className="auth-subtitle">You have been signed out.<br />Please return to the main application to launch again.</p>
+          <footer className="auth-footer" style={{ marginTop: '24px' }}>
+            <span>© 2026 Wealth Management</span>
+          </footer>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="auth-container">

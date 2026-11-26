@@ -31,6 +31,7 @@ export function AuthProvider({ children }) {
     () => localStorage.getItem('googleCalConnected') === 'true'
   );
   const [ready, setReady] = useState(false);
+  const [ssoLoggedOut, setSsoLoggedOut] = useState(false);
   const timerRef = useRef(null);
   const absoluteTimerRef = useRef(null);
   const absoluteEmailRef = useRef('');
@@ -38,6 +39,7 @@ export function AuthProvider({ children }) {
   const logout = useCallback(() => {
     clearTimeout(timerRef.current);
     clearTimeout(absoluteTimerRef.current);
+    const wasSso = hasSsoSession();
     clearAuthCookies();
     clearSsoSession();
     clearLegacyAuthStorage();
@@ -45,6 +47,10 @@ export function AuthProvider({ children }) {
     setIsAuthenticated(false);
     setUserId('');
     setGoogleConnectedState(false);
+    if (wasSso) {
+      setSsoLoggedOut(true);
+      try { window.parent.postMessage({ type: 'wa_sso_logout' }, '*'); } catch { /* ignore */ }
+    }
   }, []);
 
   const resetTimer = useCallback(() => {
@@ -124,7 +130,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={{
-      isAuthenticated, userId, googleConnected,
+      isAuthenticated, userId, googleConnected, ssoLoggedOut,
       login, logout, setGoogleConnected,
     }}>
       {children}
