@@ -6,6 +6,12 @@ import {
   isAuthSessionExpired,
   touchAuthSessionStart,
   persistAuthTokens,
+  persistSsoSession,
+  clearSsoSession,
+  hasSsoSession,
+  getSsoEmail,
+  touchSsoSessionStart,
+  isSsoSessionExpired,
 } from '../utils/authCookies';
 import { verifyUrlIdToken } from '../utils/firebase';
 
@@ -15,10 +21,11 @@ const ABSOLUTE_SESSION_TIMEOUT = 8 * 60 * 60 * 1000;
 
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(
-    () => hasAuthCookies() && !isAuthSessionExpired(SESSION_TIMEOUT)
+    () => (hasAuthCookies() && !isAuthSessionExpired(SESSION_TIMEOUT)) ||
+          (hasSsoSession() && !isSsoSessionExpired(SESSION_TIMEOUT))
   );
   const [userId, setUserId] = useState(
-    () => localStorage.getItem('advisorUserId') || ''
+    () => localStorage.getItem('advisorUserId') || getSsoEmail() || ''
   );
   const [googleConnected, setGoogleConnectedState] = useState(
     () => localStorage.getItem('googleCalConnected') === 'true'
@@ -32,6 +39,7 @@ export function AuthProvider({ children }) {
     clearTimeout(timerRef.current);
     clearTimeout(absoluteTimerRef.current);
     clearAuthCookies();
+    clearSsoSession();
     clearLegacyAuthStorage();
     localStorage.removeItem('googleCalConnected');
     setIsAuthenticated(false);
@@ -54,8 +62,7 @@ export function AuthProvider({ children }) {
       const { valid } = verifyUrlIdToken(urlIdToken);
       window.history.replaceState({}, '', window.location.pathname);
       if (valid) {
-        persistAuthTokens({ accessToken: urlIdToken, idToken: urlIdToken, refreshToken: urlIdToken });
-        touchAuthSessionStart();
+        persistSsoSession(urlIdToken, urlEmail);
         clearLegacyAuthStorage();
         localStorage.setItem('advisorUserId', urlEmail);
         setUserId(urlEmail);
@@ -87,13 +94,18 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     clearLegacyAuthStorage();
-    if (!hasAuthCookies()) { setIsAuthenticated(false); return; }
-    if (isAuthSessionExpired(SESSION_TIMEOUT)) { logout(); return; }
+    const cookieOk = hasAuthCookies() && !isAuthSessionExpired(SESSION_TIMEOUT);
+    const ssoOk = hasSsoSession() && !isSsoSessionExpired(SESSION_TIMEOUT);
+    if (!cookieOk && !ssoOk) { setIsAuthenticated(false); return; }
     if (!isAuthenticated) return;
 
     resetTimer();
     const events = ['mousedown', 'keydown', 'scroll', 'touchstart'];
-    const handleActivity = () => { touchAuthSessionStart(); resetTimer(); };
+    const handleActivity = () => {
+      if (hasAuthCookies()) touchAuthSessionStart();
+      if (hasSsoSession()) touchSsoSessionStart();
+      resetTimer();
+    };
     events.forEach((e) => window.addEventListener(e, handleActivity));
     return () => {
       clearTimeout(timerRef.current);

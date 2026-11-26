@@ -71,8 +71,45 @@ export function clearLegacyAuthStorage() {
   sessionStorage.removeItem('session_start');
 }
 
+// --- localStorage-based session (used when cookies are blocked in iframes) ---
+const LS_PREFIX = 'wa_sso_';
+
+export function persistSsoSession(token, email) {
+  localStorage.setItem(`${LS_PREFIX}access_token`, token);
+  localStorage.setItem(`${LS_PREFIX}session_start`, Date.now().toString());
+  localStorage.setItem(`${LS_PREFIX}email`, email);
+}
+
+export function clearSsoSession() {
+  [`${LS_PREFIX}access_token`, `${LS_PREFIX}session_start`, `${LS_PREFIX}email`]
+    .forEach((k) => localStorage.removeItem(k));
+}
+
+export function hasSsoSession() {
+  return Boolean(localStorage.getItem(`${LS_PREFIX}access_token`));
+}
+
+export function getSsoToken() {
+  return localStorage.getItem(`${LS_PREFIX}access_token`) || '';
+}
+
+export function getSsoEmail() {
+  return localStorage.getItem(`${LS_PREFIX}email`) || '';
+}
+
+export function touchSsoSessionStart() {
+  localStorage.setItem(`${LS_PREFIX}session_start`, Date.now().toString());
+}
+
+export function isSsoSessionExpired(timeoutMs) {
+  const raw = localStorage.getItem(`${LS_PREFIX}session_start`);
+  const sessionStart = parseInt(raw, 10);
+  if (isNaN(sessionStart)) return true;
+  return Date.now() - sessionStart >= timeoutMs;
+}
+
 export function getCognitoToken() {
-  return getCookie(AUTH_COOKIE_NAMES.accessToken) || '';
+  return getCookie(AUTH_COOKIE_NAMES.accessToken) || localStorage.getItem('wa_sso_access_token') || '';
 }
 
 export function getRefreshToken() {
@@ -96,7 +133,7 @@ export function getSessionId() {
 }
 
 export function isAuthSessionExpired(timeoutMs) {
-  const raw = getCookie(AUTH_COOKIE_NAMES.sessionStart);
+  const raw = getCookie(AUTH_COOKIE_NAMES.sessionStart) || localStorage.getItem('wa_sso_session_start');
   const sessionStart = parseInt(raw, 10);
   if (isNaN(sessionStart)) return true;
   return Date.now() - sessionStart >= timeoutMs;
