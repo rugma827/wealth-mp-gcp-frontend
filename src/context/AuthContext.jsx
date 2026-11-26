@@ -5,7 +5,9 @@ import {
   hasAuthCookies,
   isAuthSessionExpired,
   touchAuthSessionStart,
+  persistAuthTokens,
 } from '../utils/authCookies';
+import { verifyUrlIdToken } from '../utils/firebase';
 
 const AuthContext = createContext();
 const SESSION_TIMEOUT = 30 * 60 * 1000;
@@ -21,6 +23,7 @@ export function AuthProvider({ children }) {
   const [googleConnected, setGoogleConnectedState] = useState(
     () => localStorage.getItem('googleCalConnected') === 'true'
   );
+  const [ready, setReady] = useState(false);
   const timerRef = useRef(null);
   const absoluteTimerRef = useRef(null);
   const absoluteEmailRef = useRef('');
@@ -41,6 +44,29 @@ export function AuthProvider({ children }) {
     clearTimeout(timerRef.current);
     timerRef.current = setTimeout(logout, SESSION_TIMEOUT);
   }, [isAuthenticated, logout]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const urlIdToken = params.get('idToken');
+    const urlEmail = params.get('email');
+
+    if (urlIdToken && urlEmail) {
+      const { valid } = verifyUrlIdToken(urlIdToken);
+      window.history.replaceState({}, '', window.location.pathname);
+      if (valid) {
+        persistAuthTokens({ accessToken: urlIdToken, idToken: urlIdToken, refreshToken: urlIdToken });
+        touchAuthSessionStart();
+        clearLegacyAuthStorage();
+        localStorage.setItem('advisorUserId', urlEmail);
+        setUserId(urlEmail);
+        setIsAuthenticated(true);
+      } else {
+        window.location.replace('/login?sessionExpired=1');
+        return;
+      }
+    }
+    setReady(true);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const login = (email) => {
     touchAuthSessionStart();
@@ -81,6 +107,8 @@ export function AuthProvider({ children }) {
     absoluteTimerRef.current = setTimeout(logout, ABSOLUTE_SESSION_TIMEOUT);
     return () => clearTimeout(absoluteTimerRef.current);
   }, [isAuthenticated]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (!ready) return null;
 
   return (
     <AuthContext.Provider value={{

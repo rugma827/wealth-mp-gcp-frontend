@@ -44,4 +44,16 @@ export async function refreshFirebaseToken() {
   }
 }
 
+export function verifyUrlIdToken(idToken) {
+  try {
+    const payload = JSON.parse(atob(idToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+    const now = Math.floor(Date.now() / 1000);
+    if (payload.aud !== import.meta.env.VITE_FIREBASE_PROJECT_ID) return { valid: false };
+    if (payload.exp <= now) return { valid: false };
+    return { valid: true, email: payload.email || '' };
+  } catch {
+    return { valid: false };
+  }
+}
+
 export { auth };
